@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tanvir Ahmed Hridoy | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --accent: #00ff88;
+      --accent2: #ff3e6c; --text: #f0f0f0; --muted: #666; --border: #222;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2rem;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Space Mono', monospace; font-size: 1rem; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    #home { min-height: 100vh; display: flex; align-items: center; padding: 6rem 2rem 2rem; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 20% 50%, rgba(0,255,136,0.07) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,62,108,0.07) 0%, transparent 50%); }
+    .grid-lines { position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.4; }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s forwards 0.2s; }
+    h1 { font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s forwards 0.4s; }
+    h1 span { color: var(--accent); }
+    .hero-desc { font-size: 1.1rem; color: var(--muted); max-width: 500px; line-height: 1.7; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s forwards 0.6s; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s forwards 0.8s; }
+    .btn { padding: 0.9rem 2rem; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; text-decoration: none; transition: all 0.3s; display: inline-block; }
+    .btn-primary { background: var(--accent); color: #000; border: 2px solid var(--accent); font-weight: 700; }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem; }
+    h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 3rem; line-height: 1.1; }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-img-box { aspect-ratio: 1; border: 2px solid var(--border); border-radius: 8px; overflow: hidden; position: relative; background: var(--surface); display: flex; align-items: center; justify-content: center; }
+    .about-img-box::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,255,136,0.1), transparent); pointer-events: none; }
+    .profile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .avatar-placeholder { font-size: 6rem; opacity: 0.3; }
+    .about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
+    .skills-list { display: flex; flex-wrap: wrap; gap: 0.6rem; list-style: none; }
+    .skills-list li { font-family: 'Space Mono', monospace; font-size: 0.75rem; padding: 0.4rem 1rem; border: 1px solid var(--accent); color: var(--accent); border-radius: 2px; letter-spacing: 1px; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transition: transform 0.3s; }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-num { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 1rem; }
+    .project-card h3 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+    .project-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; padding: 0.3rem 0.7rem; background: rgba(0,255,136,0.08); color: var(--accent); border-radius: 2px; }
+
+    #contact { text-align: center; }
+    .contact-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4rem 2rem; max-width: 600px; margin: 0 auto; position: relative; overflow: hidden; }
+    .contact-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,255,136,0.05), transparent 70%); }
+    .contact-box h3 { font-size: 1.8rem; margin-bottom: 1rem; position: relative; }
+    .contact-box p { color: var(--muted); margin-bottom: 2rem; position: relative; }
+    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; position: relative; }
+    .contact-link { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--muted); text-decoration: none; padding: 0.6rem 1.2rem; border: 1px solid var(--border); border-radius: 4px; transition: all 0.3s; letter-spacing: 1px; }
+    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 1px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.7s, transform 0.7s; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-img-box { max-width: 250px; margin: 0 auto; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">TANVIR AHMED HRIDOY</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="home">
+    <div class="hero-bg"></div>
+    <div class="grid-lines"></div>
+    <div class="hero-content">
+      <p class="hero-tag">// Available for work</p>
+      <h1>Hi, I'm <span>Tanvir Ahmed</span> 👋</h1>
+      <p class="hero-desc">
+        I'm a student of Class 8 of BAF Shaheen College,Description of your third project goes here. DHAKA & aspiring web developer from. I build clean, fast websites with HTML, CSS & JavaScript. Currently learning C#, Python, and app development.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary">See My Work</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <p class="section-label fade-in">// About Me</p>
+    <h2 class="fade-in">Who am I?</h2>
+    <div class="about-grid">
+      <div class="about-img-box fade-in">
+        <!--
+          ✅ PHOTO ADD করতে:
+          তোমার ছবিটা portfolio.html এর পাশে রাখো
+          তারপর নিচের src="photo.jpg" তে সেই file এর নাম দাও
+          যেমন: src="tanvir.jpg" বা src="myphoto.png"
+        -->
+        <img
+          src="tanvir.jpg"
+          alt="Tanvir Ahmed Hridoy"
+          class="profile-img"
+          onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+        />
+        <span id="fallback" class="avatar-placeholder" style="display:none;">👤</span>
+      </div>
+      <div class="about-text fade-in">
+        <p>
+          I am a future web and app developer who has learned HTML, CSS, and JavaScript, and is currently learning Python and C#. My goal is to create beautiful and functional websites and to develop high-quality apps in the future.
+        </p>
+        <p>
+          I believe that starting to learn coding at a young age, I will master it quickly and build great things for the world.
+        </p>
+        <ul class="skills-list">
+          <li>HTML5</li>
+          <li>CSS3</li>
+          <li>JavaScript</li>
+          <li>Python</li>
+          <li>C#</li>
+          <li>Responsive Design</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <p class="section-label fade-in">// My Work</p>
+    <h2 class="fade-in">Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card fade-in">
+        <p class="project-num">01 --</p>
+        <h3>MY Own Portfolio Website</h3>
+        <p>My personal portfolio website built with HTML, CSS, and JavaScript.</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <p class="project-num">02 --</p>
+        <h3>Project Two</h3>
+        <p>Description - EMPTY</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span>
+        </div>
+      </div>
+      <div class="project-card fade-in">
+        <p class="project-num">03 --</p>
+        <h3>Project Three</h3>
+      <p>Description - EMPTY</p>
+        <div class="project-tags">
+          <span class="tag">JavaScript</span><span class="tag">CSS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <p class="section-label fade-in">// Get In Touch</p>
+    <h2 class="fade-in">Contact Me</h2>
+    <div class="contact-box fade-in">
+      <h3>Let's work together! 🚀</h3>
+      <p>I'm available for new projects and opportunities.</p>
+      <div class="contact-links">
+  
+        <a href="https://www.facebook.com/share/1HqTDxr9iP/" target="_blank" class="contact-link">📘 Facebook</a>
+       
+        <a href="https://wa.me/8801950334458" target="_blank" class="contact-link">💬 Whatsapp</a>
+        
+        <a href="https://www.instagram.com/hridoy_ahmed_tanvir" target="_blank" class="contact-link">📸 Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ by <span style="color: var(--accent);">Tanvir Ahmed Hridoy</span> -- 2025</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+      links.forEach(l => { l.style.color = l.getAttribute('href') === '#' + current ? 'var(--accent)' : ''; });
+    });
+  </script>
+</body>
+</html>
